@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable,NotFoundException } from '@nestjs/common';
 
 @Injectable()
@@ -12,16 +13,17 @@ export class ProduitsService {
         return this.produits;
     }
     getOneProduct(id){
-        let element = this.produits.find((el)=>el.id == id);
+        const element = this.produits.find((el)=>el.id == id);
         console.log(element);
         return element;
     }
     deleteOne(id){
-        let elementIndex = this.produits.findIndex((el)=> el.id === id);
+        console.log(id);
+        const elementIndex = this.produits.findIndex((el)=> el.id == id);
         console.log(elementIndex);
-        if(elementIndex >0 ){
+        if(elementIndex >= 0 ){
             this.produits.splice(elementIndex,1);
-            let result = {"statut" : true,"data" : this.produits};
+            const result = {"statut" : true,"data" : this.produits};
             return result;
         }else{
             throw new NotFoundException('Element introuvable');
@@ -29,12 +31,13 @@ export class ProduitsService {
     }
     insertOne(product){
         this.produits.push(product);
-        return this.produits;
+        return product;
     }
     updateProduct(id,product)
     {
-        let indexElement = this.produits.findIndex((el)=> el.id == id);
-        console.log('update',product);
+        const indexElement = this.produits.findIndex((el) => el.id == id);
+        console.log('update',product,'id',id);
+
         if(indexElement < 0){
             throw new NotFoundException('produit introuvable');
         }else{
@@ -43,7 +46,7 @@ export class ProduitsService {
         }
     }
     searchByName(name){
-        let element = this.produits.find((el) => el.name == name);
+        const element = this.produits.find((el) => el.name == name);
         console.log(' elemnt ',element, ' name ',name);
         return element;
     }

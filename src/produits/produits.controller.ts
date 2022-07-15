@@ -1,13 +1,15 @@
+/* eslint-disable prettier/prettier */
 import { Controller,Get,Delete,Body,Post,Param,Put,Res,Ip,HttpCode,Query } from '@nestjs/common';
 import {ProduitsService} from './produits.service';
 import {CreateProduitDto} from './dto/create-produit.dto';
 @Controller('produits')
 export class ProduitsController {
-    constructor(private readonly pService:ProduitsService){}
+  constructor(private readonly pService: ProduitsService) {}
+
     @Get()
     async getAll(@Res() res,@Ip() ip): Promise<any[]>{
         console.log(ip);
-        let result = this.pService.getAll();
+        const result = this.pService.getAll();
         return res.status(200).send(result);
     }
     @Get('/:id')
@@ -19,17 +21,20 @@ export class ProduitsController {
         return this.pService.deleteOne(produitId);
     }
     @Post()
+    @HttpCode(204)
     insert(@Body() product : CreateProduitDto){
         return this.pService.insertOne(product);
     }
     @Put('/:id')
-        update(@Body() product,@Param('id') produitId){
-        return this.pService.updateProduct(produitId,product);
+        update(@Body() product,@Param('id') produitId,@Res() res){
+        const result = this.pService.updateProduct(produitId,product);
+        res.send(result);
     }
     @Get('/search')
     search(@Query('q') search, @Res() res){
-        let element = this.pService.searchByName(search);
-        res.send(element);
+        const element = this.pService.searchByName(search);
+        const result = {"status" : true,"data" : element}
+        res.send(result);
     }
 }
 
