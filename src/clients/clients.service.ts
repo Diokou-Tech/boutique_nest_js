@@ -11,7 +11,6 @@ export class ClientsService {
     { id: 4, name: 'Mariama', prenom: 'diokou', company: 'Expert Comptable' },
   ];
   create(item) {
-    console.log(item);
     //add client on tabs
     this.clients.push(item);
     return item;

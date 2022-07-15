@@ -1,7 +1,10 @@
 /* eslint-disable prettier/prettier */
-import { Controller,Get,Delete,Body,Post,Param,Put,Res,Ip,HttpCode,Query } from '@nestjs/common';
+import { Controller,Get,Delete,Body,Post,Param,Put,Res,Ip,HttpCode,Query, UseGuards } from '@nestjs/common';
 import {ProduitsService} from './produits.service';
 import {CreateProduitDto} from './dto/create-produit.dto';
+import { AuthGuard } from 'src/auth/auth.guard';
+
+@UseGuards(AuthGuard)
 @Controller('produits')
 export class ProduitsController {
   constructor(private readonly pService: ProduitsService) {}

@@ -9,15 +9,14 @@ export class UsersService {
   constructor(@InjectModel(userModelName) private model: Model<Iuser>) {}
 
   insert(user: Iuser) {
-    console.log('add new user', user);
       const item = this.model.create(user);
       return item;
   }
 
-  findByUsername(username: string){
+  findByUsername(username: string) {
     return this.model.findOne({ username });
   }
-  
+
   async findByusernameOrFail(username: string){
     const found = this.findByUsername(username);
     if (!found) {
