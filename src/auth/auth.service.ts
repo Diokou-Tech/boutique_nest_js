@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException,Res } from '@nestjs/common';
 import { Iuser } from 'src/users/user.interface';
 import { UsersService } from 'src/users/users.service';
 import { Session } from './dto/session.type';
@@ -9,13 +9,17 @@ export class AuthService {
   constructor(private readonly userService: UsersService) {}
 
   async register(user: Iuser) {
-    let new_user = await this.userService.insert(user);
-    new_user = new_user.toObject();
-    delete new_user.password;
-    const token = jwt.sign(new_user, process.env.SECRET_KEY, {
-      expiresIn: '3h',
-    });
-    return { user: new_user, token };
+    try{
+      let new_user = await this.userService.insert(user);
+      new_user = new_user.toObject();
+      delete new_user.password;
+      const token = jwt.sign(new_user, process.env.SECRET_KEY, {
+        expiresIn: '3h',
+      });
+      return { user: new_user, token };
+    }catch(error){
+      throw new NotFoundException(error.message);
+    }
   }
 
   async login(logins: Iuser): Promise<Session> {
@@ -32,13 +36,13 @@ export class AuthService {
     });
     return { user, token };
   }
-  async verifToken(token: string): Promise<boolean> {
+  async verifToken(token: string): Promise<boolean | Iuser> {
     return new Promise((resolve, reject) => {
       jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
         if (err) {
           resolve(false);
         } else {
-          resolve(true);
+          resolve(data);
         }
       });
     });

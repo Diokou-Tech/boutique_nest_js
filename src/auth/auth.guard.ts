@@ -1,5 +1,4 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable()
@@ -13,10 +12,10 @@ export class AuthGuard implements CanActivate {
     const authorization = req.headers.authorization;
     if (authorization) {
       const token = authorization.replace('Bearer ', '');
-      console.log(token);
       // verif token
       const result = await this.authService.verifToken(token);
-      return result;
+      req.user = result;
+      return Boolean(result);
     } else {
       return false;
     }

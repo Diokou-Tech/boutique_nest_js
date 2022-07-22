@@ -1,5 +1,6 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete,Res,HttpCode, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { current_user } from 'src/decorators/current-user.decorator';
 import { ClientsService } from './clients.service';
 import { CreateClientDto } from './dto/create-client.dto';
 import { UpdateClientDto } from './dto/update-client.dto';
@@ -15,8 +16,9 @@ export class ClientsController {
   }
 
   @Get()
-  findAll(@Res() res) {
-    let result = this.clientsService.findAll();
+  findAll(@Res() res,@current_user() user) {
+    console.log(user);
+    let result = this.clientsService.findAll(); 
     res.status(200).send(result);
   }
 
