@@ -2,11 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  """username for user """
+  username: String!
+  password: String!
+}
+
 type Produit {
+  """the name of product"""
   name: String!
   price: Float!
 }
 
 type Query {
   fetchProduits: [Produit!]
+  fetchProduit(id: String!): Produit
+  fetchUsers: [User!]!
+  fetchOneUser(username: String!): User!
 }

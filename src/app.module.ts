@@ -21,7 +21,7 @@ import { ProductResolver } from './produits/produits.resolvers';
       GraphQLModule.forRoot<ApolloDriverConfig>({
         autoSchemaFile: "schema.gql",
         driver: ApolloDriver,
-        playground: false
+        playground: process.env.MODE_APP !== 'prod'
       }),
   ],
   controllers: [AppController, ProduitsController],

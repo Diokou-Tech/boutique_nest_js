@@ -5,7 +5,7 @@ import {CreateProduitDto} from './dto/create-produit.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { current_user } from 'src/decorators/current-user.decorator';
 
-@UseGuards(AuthGuard)
+// @UseGuards(AuthGuard)
 @Controller('produits')
 export class ProduitsController {
   constructor(private readonly pService: ProduitsService) {}
