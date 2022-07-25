@@ -1,53 +1,34 @@
 /* eslint-disable prettier/prettier */
 import { Injectable,NotFoundException } from '@nestjs/common';
-
+import { produitModelName } from './produit.model';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { Iproduit } from './produit.interface';
 @Injectable()
 export class ProduitsService {
-    private produits =[
-        {id:1,name: "orange",price:8000},
-        {id:2,name: "bic",price:5000},
-        {id:3,name: "orange",price:800},
-        {id:4,name: "coton",price:1200},
-    ]
+    constructor(@InjectModel(produitModelName) private model: Model<Iproduit>) {}
+
     getAll(){
-        return this.produits;
+        console.log('get all produits')
+        return this.model.find({}); 
+         
     }
     getOneProduct(id){
-        const element = this.produits.find((el)=>el.id == id);
-        console.log(element);
-        return element;
+        return this.model.findOne({"_id": id});
     }
     deleteOne(id){
-        console.log(id);
-        const elementIndex = this.produits.findIndex((el)=> el.id == id);
-        console.log(elementIndex);
-        if(elementIndex >= 0 ){
-            this.produits.splice(elementIndex,1);
-            const result = {"statut" : true,"data" : this.produits};
-            return result;
-        }else{
-            throw new NotFoundException('Element introuvable');
-        }
+        return this.model.deleteOne({"_id": id});
     }
-    insertOne(product){
-        this.produits.push(product);
-        return product;
+    insertOne(product): Promise<Iproduit>{
+        console.log({product});
+        return this.model.create(product);
     }
     updateProduct(id,product)
     {
-        const indexElement = this.produits.findIndex((el) => el.id == id);
-        console.log('update',product,'id',id);
-
-        if(indexElement < 0){
-            throw new NotFoundException('produit introuvable');
-        }else{
-            this.produits[indexElement] =  {...this.produits[indexElement], ...product};
-            return this.produits[indexElement];
-        }
+        return this.model.updateOne({"_id": id},{$set : product });
     }
-    searchByName(name){
-        const element = this.produits.find((el) => el.name == name);
-        console.log(' elemnt ',element, ' name ',name);
+    async searchByName(name){
+        const element = await this.model.findOne({ "name" : name });
         return element;
     }
 }

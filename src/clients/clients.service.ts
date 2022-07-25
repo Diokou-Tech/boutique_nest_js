@@ -1,27 +1,25 @@
 import { Injectable,NotFoundException,HttpException } from '@nestjs/common';
-import { CreateClientDto } from './dto/create-client.dto';
+import { InjectModel } from '@nestjs/mongoose';
 import { UpdateClientDto } from './dto/update-client.dto';
-
+import { Client } from './entities/client.entity';
+import { Model } from 'mongoose';
+import { clientModelName } from './client.model';
 @Injectable()
 export class ClientsService {
-  public clients = [
-    { id: 1, name: 'Cheikhou', prenom: 'diokou', company: 'Diokou tech' },
-    { id: 2, name: 'alui', prenom: 'Djalo', company: 'Djalo tech' },
-    { id: 3, name: 'Aissatou', prenom: 'diokou', company: 'Aissatou Make-UP' },
-    { id: 4, name: 'Mariama', prenom: 'diokou', company: 'Expert Comptable' },
-  ];
+
+  constructor(@InjectModel(clientModelName) private model: Model<Client> ){}
+
   create(item) {
-    //add client on tabs
-    this.clients.push(item);
-    return item;
+    console.log({item});
+    return this.model.create(item);
   }
 
   findAll() {
-    return this.clients;
+    return this.model.find({});
   }
 
-  findOne(id: number) {
-    let item = this.clients.find((ele) => ele.id == id);
+  async findOne(id: string) {
+    let item = await  this.model.findOne({"_id": id});
     if (item) {
       return item;
     } else {
@@ -29,24 +27,11 @@ export class ClientsService {
     }
   }
 
-  update(id: number, item: UpdateClientDto) {
-    const indexElement = this.clients.findIndex((el) => el.id == id);
-    if(indexElement < 0){
-      throw new NotFoundException('client introuvable');
-    }else{
-      this.clients[indexElement] = {...this.clients[indexElement],...item};
-      return this.clients[indexElement];
-    }
+  update(id: string, item: UpdateClientDto) {
+    return this.model.updateOne({"_id": id},{$set : item});
   }
 
-  remove(id: number) {
-    let indexItem = this.clients.findIndex((ele) => ele.id == id);
-    if(indexItem !== -1){
-    // remove clients
-    const item = this.clients.splice(indexItem,1);
-    return item;
-    }else{
-      throw new NotFoundException('Client introuvable !');
-    }
+  remove(id: string) {
+    return this.model.deleteOne({"_id": id});
   }
 }

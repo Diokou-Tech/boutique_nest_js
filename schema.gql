@@ -8,6 +8,17 @@ type User {
   password: String!
 }
 
+type Session {
+  user: User!
+  token: String!
+}
+
+type Client {
+  name: String!
+  prenom: String!
+  company: String!
+}
+
 type Produit {
   """the name of product"""
   name: String!
@@ -17,6 +28,25 @@ type Produit {
 type Query {
   fetchProduits: [Produit!]
   fetchProduit(id: String!): Produit
+  fetchClients: [Client!]
+  fetchOneClient(id: String!): Client!
+  getAll: [User!]!
   fetchUsers: [User!]!
   fetchOneUser(username: String!): User!
+}
+
+type Mutation {
+  register(registerInput: registerInput!): Session!
+}
+
+input registerInput {
+  username: String!
+  password: String!
+  role: userRole!
+}
+
+"""possible user role !"""
+enum userRole {
+  ADMIN
+  USER
 }

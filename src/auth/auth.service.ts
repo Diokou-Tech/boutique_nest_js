@@ -47,6 +47,9 @@ export class AuthService {
       });
     });
   }
+  async findAll(){
+    return this.userService.findAll();
+  }
   // createToken(user): Promise<any> {
   //   user = user.toObkect();
   //   delete user.password;

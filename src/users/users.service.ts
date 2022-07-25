@@ -17,7 +17,7 @@ export class UsersService {
     return this.model.findOne({ username });
   }
   findAll(){
-    return this.model.find();
+    return this.model.find({});
   }
   async findByusernameOrFail(username: string){
     const found = this.findByUsername(username);
