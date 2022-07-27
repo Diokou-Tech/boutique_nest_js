@@ -7,29 +7,16 @@ import { reservationModelName } from './db/reservation.model';
 @Injectable()
 export class ReservationsService {
     constructor(@InjectModel(reservationModelName) private model : Model<Ireservation>){}
-    public reservations = [
-        {
-        code: "C01",
-        produit: {
-            name: "orange",
-            price: "2000"
-        },
-        clientId: 2 
-        },
-        { 
-            code: "C02",
-            produit: {
-                name: "orange",
-                price: "2000"
-            },
-            clientId: 3
-        },
-    ];
+
     findAll(){
-        return this.reservations;
+        return this.model.find();
     }
     async getOne(id: string){
         const item = await this.model.findOne({"_id" : id});
         return item;
+    }
+    async insertOne(item){
+        let reservation = await this.model.create(item);
+        return reservation;
     }
 }

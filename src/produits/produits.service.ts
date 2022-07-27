@@ -9,9 +9,7 @@ export class ProduitsService {
     constructor(@InjectModel(produitModelName) private model: Model<Iproduit>) {}
 
     getAll(){
-        console.log('get all produits')
         return this.model.find({}); 
-         
     }
     getOneProduct(id){
         return this.model.findOne({"_id": id});

@@ -25,6 +25,17 @@ type Produit {
   price: Float!
 }
 
+type Reservation {
+  """the name of product"""
+  code: String!
+  produit: Produit!
+  clientId: String!
+  transaction: UUID
+}
+
+"""UUID PARSER"""
+scalar UUID
+
 type Query {
   fetchProduits: [Produit!]
   fetchProduit(id: String!): Produit
@@ -33,6 +44,7 @@ type Query {
   getAll: [User!]!
   fetchUsers: [User!]!
   fetchOneUser(username: String!): User!
+  fetchReservations: [Reservation!]!
 }
 
 type Mutation {

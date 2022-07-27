@@ -1,4 +1,5 @@
-import { Controller,Get } from '@nestjs/common';
+import { Controller,Get,Body,Post } from '@nestjs/common';
+import { Ireservation } from './db/reservation.interface';
 import { ReservationsService } from './reservations.service';
 
 @Controller('reservations')
@@ -12,5 +13,9 @@ export class ReservationsController {
     @Get(':id')
     getOne(id: string){
         return this.reservationService.getOne(id);
+    }
+    @Post()
+    insertOne(@Body() reservation:Ireservation){
+        return this.reservationService.insertOne(reservation);
     }
 }

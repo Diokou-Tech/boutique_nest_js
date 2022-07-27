@@ -14,6 +14,7 @@ import { ProductResolver } from './produits/produits.resolvers';
 import { produitModelName } from './produits/produit.model';
 import { ProduitSchema } from './produits/produits.schema';
 import { ReservationsModule } from './reservations/reservations.module';
+import { GqlUuid } from 'graphql/uuid.scalar';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -26,6 +27,9 @@ import { ReservationsModule } from './reservations/reservations.module';
       autoSchemaFile: 'schema.gql',
       driver: ApolloDriver,
       playground: process.env.MODE_APP !== 'prod',
+      resolvers: {
+        UUID : GqlUuid
+      }
     }),
     ReservationsModule,
   ],

@@ -16,6 +16,7 @@ export class AuthResolver{
     {
         return this.authService.register(registerInput);
     }
+    
     @Query(returns => [User])
     getAll(){
         return this.authService.findAll();
